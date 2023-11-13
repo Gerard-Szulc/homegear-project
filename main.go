@@ -5,7 +5,6 @@ import (
 	"dustData/db"
 	"dustData/structs"
 	"github.com/gin-gonic/gin"
-	"net/http"
 )
 
 func main() {
@@ -21,11 +20,12 @@ func main() {
 
 	r := gin.Default()
 
-	r.Static("/assets", "dist/assets")
-	r.LoadHTMLGlob("dist/*.html")
-	r.GET("/", func(c *gin.Context) {
-		c.HTML(http.StatusOK, "index.html", nil)
-	})
+	// prepare frontend later
+	//r.Static("/assets", "dist/assets")
+	//r.LoadHTMLGlob("dist/*.html")
+	//r.GET("/", func(c *gin.Context) {
+	//	c.HTML(http.StatusOK, "index.html", nil)
+	//})
 
 	r.GET("/api/ping", func(c *gin.Context) {
 		c.JSON(200, gin.H{

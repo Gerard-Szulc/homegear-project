@@ -1,10 +1,10 @@
 package devicesController
 
 import (
-	"dustData/db"
-	"dustData/structs"
 	"fmt"
 	"github.com/gin-gonic/gin"
+	"homegear/db"
+	"homegear/structs"
 	"net/http"
 )
 

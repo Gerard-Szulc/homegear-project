@@ -1,11 +1,11 @@
 package controllers
 
 import (
-	"dustData/controllers/devicesController"
-	"dustData/controllers/measurementsController"
-	"dustData/controllers/usersController"
-	"dustData/middlewares"
 	"github.com/gin-gonic/gin"
+	"homegear/controllers/devicesController"
+	"homegear/controllers/measurementsController"
+	"homegear/controllers/usersController"
+	"homegear/middlewares"
 )
 
 func HandleRequests(router *gin.Engine) {

@@ -1,10 +1,10 @@
 package usersController
 
 import (
-	users "dustData/services/user"
-	"dustData/structs"
-	"dustData/utils"
 	"github.com/gin-gonic/gin"
+	users "homegear/services/user"
+	"homegear/structs"
+	"homegear/utils"
 	"io"
 	"net/http"
 )
@@ -44,20 +44,9 @@ func Register(c *gin.Context) {
 
 func GetUser(c *gin.Context) {
 	userID := c.Param("id")
-
-	//auth := r.Header.Get("Authorization")
-	if !utils.ValidateRequestToken(c.Request) {
-		c.JSON(http.StatusForbidden, gin.H{"error": map[string]interface{}{
-			"message": "error:token_not_valid",
-		}})
-	}
 	users.GetUser(userID, c)
 }
 
 func GetUsers(c *gin.Context) {
-	if !utils.ValidateRequestToken(c.Request) {
-		c.JSON(http.StatusForbidden, gin.H{"error": map[string]interface{}{"message": "error:token_not_valid"}})
-		return
-	}
 	users.GetUsers(c)
 }

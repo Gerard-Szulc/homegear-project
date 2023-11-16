@@ -1,15 +1,15 @@
 package users
 
 import (
-	"dustData/db"
-	"dustData/structs"
-	"dustData/utils"
 	"errors"
 	"fmt"
 	"github.com/gin-gonic/gin"
 	"github.com/golang-jwt/jwt"
 	"golang.org/x/crypto/bcrypt"
 	"gorm.io/gorm"
+	"homegear/db"
+	"homegear/structs"
+	"homegear/utils"
 	"net/http"
 	"os"
 	"time"

@@ -1,10 +1,10 @@
 package main
 
 import (
-	"dustData/controllers"
-	"dustData/db"
-	"dustData/structs"
 	"github.com/gin-gonic/gin"
+	"homegear/controllers"
+	"homegear/db"
+	"homegear/structs"
 )
 
 func main() {

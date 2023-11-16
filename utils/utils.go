@@ -1,10 +1,11 @@
 package utils
 
 import (
-	"dustData/structs"
 	"encoding/base64"
 	"encoding/json"
 	"fmt"
+	"github.com/gin-gonic/gin"
+	"homegear/structs"
 	"log"
 	"net/http"
 	"os"
@@ -109,7 +110,8 @@ func ValidateToken(id string, jwtToken string) bool {
 
 }
 
-func ValidateRequestToken(r *http.Request) bool {
+func ValidateRequestToken(context *gin.Context) bool {
+	r := context.Request
 	jwtKey, exists := os.LookupEnv("JWTKEY")
 	if !exists {
 		fmt.Println(exists)
@@ -159,6 +161,11 @@ func ValidateRequestToken(r *http.Request) bool {
 	expiry := tokenData["expiry"].(float64)
 	fmt.Println(token.Valid)
 	fmt.Println(tokenData["userId"])
+	context.Set("userId", tokenData["userId"])
+	if (tokenData["deviceId"]) != nil {
+		fmt.Println(tokenData["deviceId"])
+		context.Set("deviceId", tokenData["deviceId"])
+	}
 
 	expired := now.After(time.Unix(int64(expiry), 0))
 	if expired {

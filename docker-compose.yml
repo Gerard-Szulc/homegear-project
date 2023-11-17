@@ -1,0 +1,16 @@
+version: '1.0'
+
+services:
+  db:
+    env_file:
+      - ./.env
+    image: postgres
+    restart: always
+    environment:
+      POSTGRES_PASSWORD: ${DBPASSWORD}
+      POSTGRES_USER: ${DBUSER}
+      POSTGRES_DB: ${DBNAME}
+    ports:
+      - ${DBPORT}:5432
+    volumes:
+      - ${DB_PERSIST_DATA_PATH}:/var/lib/postgresql/data

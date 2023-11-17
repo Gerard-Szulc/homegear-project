@@ -11,6 +11,11 @@ import (
 var DB *gorm.DB
 
 func InitiateDB() {
+	var dbhost, exists = os.LookupEnv("DBHOST")
+	if !exists {
+		dbhost = "localhost"
+		fmt.Println(exists)
+	}
 	dbport, exists := os.LookupEnv("DBPORT")
 	if !exists {
 		fmt.Println(exists)
@@ -27,7 +32,7 @@ func InitiateDB() {
 	if !exists {
 		fmt.Println(exists)
 	}
-	dsn := fmt.Sprintf("host=localhost port=%s user=%s password=%s dbname=%s", dbport, user, password, dbname)
+	dsn := fmt.Sprintf("host=%s port=%s user=%s password=%s dbname=%s", dbhost, dbport, user, password, dbname)
 	db, err := gorm.Open(postgres.Open(dsn), &gorm.Config{})
 	if err != nil {
 		log.Fatal(err)

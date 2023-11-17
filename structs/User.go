@@ -12,14 +12,14 @@ type User struct {
 }
 
 type ResponseUser struct {
-	ID       uint
-	Username string
-	Email    string
+	ID       uint   `json:"id"`
+	Username string `json:"username"`
+	Email    string `json:"email"`
 }
 
 type ResponseUserWithToken struct {
-	Data *ResponseUser
-	Jwt  string `json:"jwt"`
+	Data *ResponseUser `json:"data"`
+	Jwt  string        `json:"jwt"`
 }
 
 type Validation struct {

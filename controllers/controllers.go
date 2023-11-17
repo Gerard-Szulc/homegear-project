@@ -2,6 +2,7 @@ package controllers
 
 import (
 	"github.com/gin-gonic/gin"
+	"homegear/controllers/authenticationController"
 	"homegear/controllers/devicesController"
 	"homegear/controllers/measurementsController"
 	"homegear/controllers/usersController"
@@ -12,9 +13,8 @@ func HandleRequests(router *gin.Engine) {
 
 	auth := router.Group("/api/")
 	{
-
-		auth.POST("login", usersController.Login)
-		auth.POST("register", usersController.Register)
+		auth.POST("login", authenticationController.Login)
+		auth.POST("register", authenticationController.Register)
 
 		//testing pi pico and esp without provisioning
 		auth.POST("measurements", measurementsController.PostMeasurement)

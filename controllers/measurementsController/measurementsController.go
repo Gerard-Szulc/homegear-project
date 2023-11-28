@@ -16,9 +16,14 @@ func PostMeasurement(c *gin.Context) {
 		return
 	}
 	device := &structs.Device{}
+	deviceId, exists := c.Get("deviceId")
+	if !exists {
+		fmt.Println(exists)
+		c.JSON(http.StatusBadRequest, gin.H{"error": "deviceId not found"})
+		return
+	}
 
-	// testing phase
-	db.DB.Where("id = ? ", 3).First(&device)
+	db.DB.Where("id = ? ", deviceId).First(&device)
 
 	measurement := structs.Measurement{
 		Type:   measurementData.Type,

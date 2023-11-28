@@ -15,14 +15,15 @@ func HandleRequests(router *gin.Engine) {
 	{
 		auth.POST("login", authenticationController.Login)
 		auth.POST("register", authenticationController.Register)
-
-		//testing pi pico and esp without provisioning
-		auth.POST("measurements", measurementsController.PostMeasurement)
 	}
 
 	authenticated := router.Group("/api/")
 	authenticated.Use(middlewares.AuthenticationRequired())
 	{
+		authenticated.POST("login-device", authenticationController.LoginDevice)
+		//testing pi pico and esp
+		authenticated.POST("measurements", measurementsController.PostMeasurement)
+
 		users := authenticated.Group("/users")
 		{
 			users.GET("/:id", usersController.GetUser)

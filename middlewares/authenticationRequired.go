@@ -75,11 +75,11 @@ func ValidateRequestToken(context *gin.Context) bool {
 	now := time.Now()
 	expiry := tokenData["expiry"].(float64)
 	fmt.Println(token.Valid)
-	fmt.Println(tokenData["userId"])
-	context.Set("userId", tokenData["userId"])
-	if (tokenData["deviceId"]) != nil {
-		fmt.Println(tokenData["deviceId"])
-		context.Set("deviceId", tokenData["deviceId"])
+	fmt.Println(tokenData["user_id"])
+	context.Set("userId", tokenData["user_id"])
+	if (tokenData["device_id"]) != nil {
+		fmt.Println(tokenData["device_id"])
+		context.Set("deviceId", tokenData["device_id"])
 	}
 
 	expired := now.After(time.Unix(int64(expiry), 0))

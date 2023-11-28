@@ -30,6 +30,21 @@ func PrepareToken(user *structs.User) string {
 	utils.HandleErr(err)
 	return token
 }
+func PrepareDeviceToken(user *structs.User, deviceId uint) string {
+	jwtKey, exists := os.LookupEnv("JWTKEY")
+	if !exists {
+		panic("JWTKEY not provided")
+	}
+	tokenContent := jwt.MapClaims{
+		"user_id":   user.ID,
+		"expiry":    time.Now().Add(time.Hour * 24 * 180).Unix(),
+		"device_id": deviceId,
+	}
+	jwtToken := jwt.NewWithClaims(jwt.GetSigningMethod("HS256"), tokenContent)
+	token, err := jwtToken.SignedString([]byte(jwtKey))
+	utils.HandleErr(err)
+	return token
+}
 
 func Login(username string, pass string, c *gin.Context) {
 	fmt.Printf("ClientIP: %s\n", c.ClientIP())
@@ -60,6 +75,36 @@ func Login(username string, pass string, c *gin.Context) {
 	} else {
 		c.JSON(http.StatusBadRequest, gin.H{"error": map[string]interface{}{"message": "not valid values"}})
 	}
+}
+func validateDeviceTempToken(token string) (valid bool) {
+	// todo add temp token validation
+	fmt.Println(token)
+	return true
+}
+func LoginDevice(deviceId uint, token string, c *gin.Context) {
+	fmt.Printf("ClientIP: %s\n", c.ClientIP())
+	userId, exists := c.Get("userId")
+	if exists != true {
+		c.JSON(http.StatusUnauthorized, gin.H{"error": map[string]interface{}{"message": "error.no_user"}})
+		return
+	}
+	valid := validateDeviceTempToken(token)
+	if valid != true {
+		c.JSON(http.StatusForbidden, gin.H{"error": map[string]interface{}{"message": "error.invalid_token"}})
+		return
+	}
+
+	user := &structs.User{}
+	result := db.DB.Where("id = ? ", userId).First(&user)
+	if errors.Is(result.Error, gorm.ErrRecordNotFound) {
+		c.JSON(http.StatusForbidden, gin.H{"error": map[string]interface{}{"message": "error.user_not_found"}})
+		return
+	}
+	if !user.Active {
+		c.JSON(http.StatusForbidden, gin.H{"error": map[string]interface{}{"message": "error.account_not_active"}})
+		return
+	}
+	prepareAuthDeviceResponse(user, deviceId, c)
 }
 
 // Create registration function
@@ -93,6 +138,13 @@ func prepareAuthResponse(user *structs.User, c *gin.Context) {
 	var response structs.ResponseUserWithToken
 	response.Jwt = PrepareToken(user)
 	response.Data = responseUser
+	c.JSON(http.StatusOK, response)
+}
+
+func prepareAuthDeviceResponse(user *structs.User, deviceId uint, c *gin.Context) {
+	var response structs.LoginDeviceResponseViewModel
+	response.Jwt = PrepareDeviceToken(user, deviceId)
+	response.DeviceId = deviceId
 	c.JSON(http.StatusOK, response)
 }
 

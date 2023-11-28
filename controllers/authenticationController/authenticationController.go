@@ -17,6 +17,16 @@ func Login(c *gin.Context) {
 	authentication.Login(formattedBody.Username, formattedBody.Password, c)
 }
 
+func LoginDevice(c *gin.Context) {
+	var formattedBody structs.LoginDeviceDto
+	if err := c.BindJSON(&formattedBody); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+
+	authentication.LoginDevice(formattedBody.DeviceId, formattedBody.Token, c)
+}
+
 func Register(c *gin.Context) {
 	var formattedBody structs.Register
 	if err := c.BindJSON(&formattedBody); err != nil {

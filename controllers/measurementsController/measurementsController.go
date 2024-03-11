@@ -41,12 +41,12 @@ func PostMeasurement(c *gin.Context) {
 }
 
 func GetMeasurements(c *gin.Context) {
-	deviceId, exists := c.Get("deviceId")
-	if !exists {
-		fmt.Println(exists)
+	deviceId := c.Param("deviceId")
+	if deviceId == "" {
 		c.JSON(http.StatusBadRequest, gin.H{"error": "deviceId not found"})
 		return
 	}
+
 	userId, _ := c.Get("userId")
 	device := &structs.Device{}
 	db.DB.Where("id = ? AND ? IN users ", deviceId, userId).First(&device)

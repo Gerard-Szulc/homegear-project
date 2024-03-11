@@ -1,11 +1,11 @@
 package clients
 
 import (
-	"dustData/services/device"
 	"encoding/json"
 	"flag"
 	"fmt"
 	mqtt "github.com/eclipse/paho.mqtt.golang"
+	"homegear/services/device"
 	"os"
 	"time"
 )

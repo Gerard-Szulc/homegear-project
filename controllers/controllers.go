@@ -23,6 +23,7 @@ func HandleRequests(router *gin.Engine) {
 		authenticated.POST("login-device", authenticationController.LoginDevice)
 		//testing pi pico and esp
 		authenticated.POST("measurements", measurementsController.PostMeasurement)
+		authenticated.GET("measurements", measurementsController.GetMeasurements)
 
 		users := authenticated.Group("/users")
 		{

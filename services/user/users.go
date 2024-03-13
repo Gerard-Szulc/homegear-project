@@ -11,9 +11,8 @@ import (
 
 func GetUser(id string, c *gin.Context) {
 	// Find and return user
-	user := &structs.User{}
-
-	result := db.DB.Where("id = ? ", id).First(&user)
+	user := structs.ResponseUser{}
+	result := db.DB.Model(&structs.User{}).Where("id = ? ", id).First(&user)
 	if errors.Is(result.Error, gorm.ErrRecordNotFound) {
 		c.JSON(http.StatusBadRequest, gin.H{"error": map[string]interface{}{"message": "error.user_not_found"}})
 		return
@@ -22,18 +21,8 @@ func GetUser(id string, c *gin.Context) {
 }
 func GetUsers(c *gin.Context) {
 	// Find and return user
-	var users []structs.User
-	db.DB.Select("id, username, email").Find(&users)
+	users := []structs.ResponseUser{}
+	db.DB.Model(&structs.User{}).Select("id, username, email").Find(&users)
 
-	responseUsers := []structs.ResponseUser{}
-	for _, user := range users {
-		responseUser := structs.ResponseUser{
-			ID:       user.ID,
-			Username: user.Username,
-			Email:    user.Email,
-		}
-		responseUsers = append(responseUsers, responseUser)
-	}
-
-	c.JSON(http.StatusOK, responseUsers)
+	c.JSON(http.StatusOK, users)
 }

@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"github.com/gin-gonic/gin"
 	"homegear/db"
+	measurementsService "homegear/services/measurements"
 	"homegear/structs"
 	"net/http"
 )
@@ -48,22 +49,15 @@ func GetMeasurements(c *gin.Context) {
 	}
 
 	userId, _ := c.Get("userId")
-	device := &structs.Device{}
-	db.DB.Where("id = ? AND ? IN users ", deviceId, userId).First(&device)
-	fmt.Println(device.ID)
 
-	if device.ID == 0 {
+	if measurementsService.UserOwnsDevice(userId.(float64), deviceId) == false {
 		c.JSON(http.StatusForbidden, gin.H{"error": "device not found"})
 		return
 	}
-	measurements := []structs.Measurement{}
+	fmt.Println("after")
 	startDate := c.Query("startDate")
 	endDate := c.Query("endDate")
 
-	if startDate != "" && endDate != "" {
-		db.DB.Where("device_id = ? AND created_at BETWEEN ? AND ?", deviceId, startDate, endDate).Find(&measurements)
-	} else {
-		db.DB.Where("device_id = ?", deviceId).Find(&measurements)
-	}
+	measurements, _ := measurementsService.GetMeasurements(deviceId, startDate, endDate)
 	c.JSON(http.StatusOK, measurements)
 }

@@ -14,3 +14,10 @@ type Measurement struct {
 	DeviceID int
 	Device   Device
 }
+type ResponseMeasurement struct {
+	ID        uint    `json:"id"`
+	Type      string  `json:"type"`
+	Value     float32 `json:"value"`
+	CreatedAt string  `json:"createdAt"`
+	DeviceID  int     `json:"deviceId"`
+}

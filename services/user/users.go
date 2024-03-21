@@ -1,9 +1,7 @@
 package users
 
 import (
-	"errors"
 	"github.com/gin-gonic/gin"
-	"gorm.io/gorm"
 	"homegear/db"
 	"homegear/structs"
 	"net/http"
@@ -12,12 +10,12 @@ import (
 func GetUser(id string, c *gin.Context) {
 	// Find and return user
 	user := structs.ResponseUser{}
-	result := db.DB.Model(&structs.User{}).Where("id = ? ", id).First(&user)
-	if errors.Is(result.Error, gorm.ErrRecordNotFound) {
+	db.DB.Model(&structs.User{}).Select("id, created_at, email, username").Where("id = ? ", id).Find(&user)
+	if user.ID == 0 {
 		c.JSON(http.StatusBadRequest, gin.H{"error": map[string]interface{}{"message": "error.user_not_found"}})
 		return
 	}
-	c.JSON(http.StatusOK, result)
+	c.JSON(http.StatusOK, user)
 }
 func GetUsers(c *gin.Context) {
 	// Find and return user

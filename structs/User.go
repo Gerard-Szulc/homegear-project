@@ -12,9 +12,10 @@ type User struct {
 }
 
 type ResponseUser struct {
-	ID       uint   `json:"id"`
-	Username string `json:"username"`
-	Email    string `json:"email"`
+	ID        uint   `json:"id"`
+	Username  string `json:"username"`
+	Email     string `json:"email"`
+	CreatedAt string `json:"createdAt"`
 }
 
 type ResponseUserWithToken struct {

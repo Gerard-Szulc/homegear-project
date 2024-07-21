@@ -41,6 +41,39 @@ func PostMeasurement(c *gin.Context) {
 	c.JSON(http.StatusOK, measurement)
 }
 
+func PostMeasurements(c *gin.Context) {
+	var measurementData structs.MeasurementsDto
+	if err := c.BindJSON(&measurementData); err != nil {
+		fmt.Println(err.Error())
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+	device := &structs.Device{}
+	deviceId, exists := c.Get("deviceId")
+	if !exists {
+		fmt.Println(exists)
+		c.JSON(http.StatusBadRequest, gin.H{"error": "deviceId not found"})
+		return
+	}
+
+	db.DB.Where("id = ? ", deviceId).First(&device)
+
+	measurements := structs.Measurements{}
+
+	for _, data := range measurementData {
+		singleMeasurement := structs.Measurement{
+			Type:   data.Type,
+			Value:  data.Value,
+			Device: *device,
+		}
+		measurements = append(measurements, singleMeasurement)
+	}
+	results := db.DB.Create(&measurements)
+	fmt.Println(results.Error)
+
+	c.JSON(http.StatusOK, measurements)
+}
+
 func GetMeasurements(c *gin.Context) {
 	deviceId := c.Param("deviceId")
 	if deviceId == "" {

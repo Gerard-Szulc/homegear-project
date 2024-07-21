@@ -21,8 +21,8 @@ func HandleRequests(router *gin.Engine) {
 	authenticated.Use(middlewares.AuthenticationRequired())
 	{
 		authenticated.POST("login-device", authenticationController.LoginDevice)
-		//testing pi pico and esp
-		authenticated.POST("measurements", measurementsController.PostMeasurement)
+		authenticated.POST("measurement", measurementsController.PostMeasurement)
+		authenticated.POST("measurements", measurementsController.PostMeasurements)
 		authenticated.GET("measurements/:deviceId", measurementsController.GetMeasurements)
 
 		users := authenticated.Group("/users")

@@ -7,6 +7,8 @@ type MeasurementDto struct {
 	Value float32 `json:"value"`
 }
 
+type MeasurementsDto []MeasurementDto
+
 type Measurement struct {
 	gorm.Model
 	Type     string
@@ -14,6 +16,7 @@ type Measurement struct {
 	DeviceID int
 	Device   Device
 }
+type Measurements []Measurement
 type ResponseMeasurement struct {
 	ID        uint    `json:"id"`
 	Type      string  `json:"type"`

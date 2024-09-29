@@ -5,7 +5,6 @@ import (
 )
 
 type DeviceDto struct {
-	Id    int        `json:"id"`
 	Name  string     `json:"name"`
 	Label string     `json:"label"`
 	Type  DeviceType `json:"type"`
@@ -30,4 +29,12 @@ type Device struct {
 	IP    string
 	Users []*User `gorm:"many2many:user_devices;"`
 	Type  DeviceType
+}
+
+type DeviceResponse struct {
+	Id    int        `json:"id"`
+	Name  string     `json:"name"`
+	Label string     `json:"label"`
+	Type  DeviceType `json:"type"`
+	IP    string     `json:"ip"`
 }

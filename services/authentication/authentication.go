@@ -81,6 +81,7 @@ func validateDeviceTempToken(token string) (valid bool) {
 	fmt.Println(token)
 	return true
 }
+
 func LoginDevice(deviceId uint, token string, c *gin.Context) {
 	fmt.Printf("ClientIP: %s\n", c.ClientIP())
 	userId, exists := c.Get("userId")

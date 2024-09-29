@@ -1,0 +1,147 @@
+definitions:
+  structs.DeviceDto:
+    properties:
+      ip:
+        type: string
+      label:
+        type: string
+      name:
+        type: string
+      type:
+        $ref: '#/definitions/structs.DeviceType'
+    type: object
+  structs.DeviceResponse:
+    properties:
+      id:
+        type: integer
+      ip:
+        type: string
+      label:
+        type: string
+      name:
+        type: string
+      type:
+        $ref: '#/definitions/structs.DeviceType'
+    type: object
+  structs.DeviceType:
+    enum:
+    - Bulb
+    - Temperature
+    - Humidity
+    - Pollution
+    type: string
+    x-enum-varnames:
+    - BulbTopic
+    - TemperatureTopic
+    - HumidityTopic
+    - PollutionTopic
+  structs.LoginDeviceResponseViewModel:
+    properties:
+      deviceId:
+        type: integer
+      jwt:
+        type: string
+    type: object
+  structs.LoginDto:
+    properties:
+      password:
+        type: string
+      username:
+        type: string
+    type: object
+  structs.ResponseUser:
+    properties:
+      createdAt:
+        type: string
+      email:
+        type: string
+      id:
+        type: integer
+      username:
+        type: string
+    type: object
+  structs.ResponseUserWithToken:
+    properties:
+      data:
+        $ref: '#/definitions/structs.ResponseUser'
+      jwt:
+        type: string
+    type: object
+info:
+  contact: {}
+paths:
+  /api/devices:
+    get:
+      description: Retrieve a list of all devices
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/structs.DeviceDto'
+            type: array
+      summary: Get all devices
+      tags:
+      - devices
+    post:
+      consumes:
+      - application/json
+      description: Add a new device with name, label, type, and IP
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/structs.DeviceResponse'
+      summary: Add a new device
+      tags:
+      - devices
+  /api/login:
+    post:
+      consumes:
+      - application/json
+      description: Login user using username and password
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/structs.LoginDto'
+      summary: Login user using username and password
+      tags:
+      - authentication
+  /api/login-device:
+    post:
+      consumes:
+      - application/json
+      description: Login device using deviceId and token
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/structs.LoginDeviceResponseViewModel'
+      summary: Login device using deviceId and token
+      tags:
+      - authentication
+  /api/register:
+    post:
+      consumes:
+      - application/json
+      description: Register a new user with username, email, and password
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/structs.ResponseUserWithToken'
+      summary: Register a new user
+      tags:
+      - authentication
+swagger: "2.0"

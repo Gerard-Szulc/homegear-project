@@ -1,0 +1,204 @@
+{
+  "openapi" : "3.0.1",
+  "info" : {
+    "contact" : { }
+  },
+  "servers" : [ {
+    "url" : "/"
+  } ],
+  "paths" : {
+    "/api/devices" : {
+      "get" : {
+        "description" : "Retrieve a list of all devices",
+        "responses" : {
+          "200" : {
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "items" : {
+                    "$ref" : "#/components/schemas/structs.DeviceDto"
+                  },
+                  "type" : "array"
+                }
+              }
+            },
+            "description" : "OK"
+          }
+        },
+        "summary" : "Get all devices",
+        "tags" : [ "devices" ]
+      },
+      "post" : {
+        "description" : "Add a new device with name, label, type, and IP",
+        "responses" : {
+          "200" : {
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/structs.DeviceResponse"
+                }
+              }
+            },
+            "description" : "OK"
+          }
+        },
+        "summary" : "Add a new device",
+        "tags" : [ "devices" ]
+      }
+    },
+    "/api/login" : {
+      "post" : {
+        "description" : "Login user using username and password",
+        "responses" : {
+          "200" : {
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/structs.LoginDto"
+                }
+              }
+            },
+            "description" : "OK"
+          }
+        },
+        "summary" : "Login user using username and password",
+        "tags" : [ "authentication" ]
+      }
+    },
+    "/api/login-device" : {
+      "post" : {
+        "description" : "Login device using deviceId and token",
+        "responses" : {
+          "200" : {
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/structs.LoginDeviceResponseViewModel"
+                }
+              }
+            },
+            "description" : "OK"
+          }
+        },
+        "summary" : "Login device using deviceId and token",
+        "tags" : [ "authentication" ]
+      }
+    },
+    "/api/register" : {
+      "post" : {
+        "description" : "Register a new user with username, email, and password",
+        "responses" : {
+          "200" : {
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/structs.ResponseUserWithToken"
+                }
+              }
+            },
+            "description" : "OK"
+          }
+        },
+        "summary" : "Register a new user",
+        "tags" : [ "authentication" ]
+      }
+    }
+  },
+  "components" : {
+    "schemas" : {
+      "structs.DeviceDto" : {
+        "properties" : {
+          "ip" : {
+            "type" : "string"
+          },
+          "label" : {
+            "type" : "string"
+          },
+          "name" : {
+            "type" : "string"
+          },
+          "type" : {
+            "$ref" : "#/components/schemas/structs.DeviceType"
+          }
+        },
+        "type" : "object"
+      },
+      "structs.DeviceResponse" : {
+        "properties" : {
+          "id" : {
+            "type" : "integer"
+          },
+          "ip" : {
+            "type" : "string"
+          },
+          "label" : {
+            "type" : "string"
+          },
+          "name" : {
+            "type" : "string"
+          },
+          "type" : {
+            "$ref" : "#/components/schemas/structs.DeviceType"
+          }
+        },
+        "type" : "object"
+      },
+      "structs.DeviceType" : {
+        "enum" : [ "Bulb", "Temperature", "Humidity", "Pollution" ],
+        "type" : "string",
+        "x-enum-varnames" : [ "BulbTopic", "TemperatureTopic", "HumidityTopic", "PollutionTopic" ]
+      },
+      "structs.LoginDeviceResponseViewModel" : {
+        "properties" : {
+          "deviceId" : {
+            "type" : "integer"
+          },
+          "jwt" : {
+            "type" : "string"
+          }
+        },
+        "type" : "object"
+      },
+      "structs.LoginDto" : {
+        "properties" : {
+          "password" : {
+            "type" : "string"
+          },
+          "username" : {
+            "type" : "string"
+          }
+        },
+        "type" : "object"
+      },
+      "structs.ResponseUser" : {
+        "properties" : {
+          "createdAt" : {
+            "type" : "string"
+          },
+          "email" : {
+            "type" : "string"
+          },
+          "id" : {
+            "type" : "integer"
+          },
+          "username" : {
+            "type" : "string"
+          }
+        },
+        "type" : "object"
+      },
+      "structs.ResponseUserWithToken" : {
+        "properties" : {
+          "data" : {
+            "$ref" : "#/components/schemas/structs.ResponseUser"
+          },
+          "jwt" : {
+            "type" : "string"
+          }
+        },
+        "type" : "object"
+      }
+    }
+  },
+  "x-original-swagger-version" : "2.0"
+}
